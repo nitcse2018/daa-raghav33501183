@@ -1,0 +1,8 @@
+Name: Raghav Shukla
+Date_Of_Birth: 06/10/1999
+Phone_No: 8218929532
+Email: shuklaraghav610@gmail.com
+Address: 28,Inder Road,Dalanwala
+Educational_Qualification: UG
+Skills: Java/Python/C/C++
+Sex: Male
