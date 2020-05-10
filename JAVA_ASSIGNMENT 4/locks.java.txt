@@ -1,0 +1,94 @@
+import java.util.*;
+class XYZ
+{
+    private int materials;
+    private boolean flag=false;
+    public synchronized int get()
+    {
+        while (flag==false)
+        {
+            try
+            {
+                wait();
+            }
+            catch (InterruptedException ie)
+            {
+            }
+        }
+        flag=false;
+        notify();
+        return materials;
+    }
+    public synchronized void put(int val)
+    {
+        while (flag==true)
+        {
+            try
+            {
+                wait();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+        materials=val;
+        flag=true;
+        notify();
+    }
+}
+class Consumer extends Thread
+{
+    private XYZ Shop;
+    public Consumer(XYZ k,int number)
+    {
+        Shop=k;
+    }
+    public void run()
+    {
+        int val=0;
+        for (int i=0;i<10;i++)
+        {
+            val=Shop.get();
+            System.out.println("Consumer Value : "+val);
+        }
+    }
+}
+class Producer extends Thread
+{
+    private XYZ Shop;
+    public Producer(XYZ k,int number)
+    {
+        Shop=k;
+    }
+    public void run()
+    {
+        for (int i=0;i<10;i++)
+        {
+            Random rand=new Random();
+            int j=rand.nextInt(100);
+            Shop.put(j);
+            System.out.println("Producer-Value : "+j);
+            try
+            {
+                sleep((int)(Math.random()*100)); //Typecasting explicitly to integer type since Math.random returns double type
+            }
+            catch (Exception e)
+            {
+            e.printStackTrace();
+            }
+        }
+    }
+}
+public class MultiThreading
+{
+      public static void main(String[] args)
+      {
+            XYZ a=new XYZ();
+            Producer p1=new Producer(a,1); //A Producer Thread is created
+            Consumer c1=new Consumer(a,1); //A Consumer Thread is created
+            //The Producer and Consumer Threads getting started
+            p1.start();
+            c1.start();
+      }
+}
